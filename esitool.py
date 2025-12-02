@@ -1698,7 +1698,7 @@ class Esi(Base):
                 self.images[f"Vendor/{element.tag.replace('ImageData', '')}"] = (
                     imageData
                 )
-                open("/tmp/test.img", "wb").write(imageData)
+                open("vendor.img", "wb").write(imageData)
 
         elements = root.find(f"./Descriptions/Devices/Device[{self.deviceid}]")
         for element in elements:
@@ -1709,7 +1709,7 @@ class Esi(Base):
                 self.images[f"Device/{element.tag.replace('ImageData', '')}"] = (
                     imageData
                 )
-                open("/tmp/test.img", "wb").write(imageData)
+                open("device.img", "wb").write(imageData)
 
     def binRead(self, bindata):
         self.startpos = 0
