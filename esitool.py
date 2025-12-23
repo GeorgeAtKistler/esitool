@@ -3,6 +3,7 @@
 #
 
 import argparse
+import os
 import sys
 import tempfile
 from lxml import etree
@@ -1698,7 +1699,8 @@ class Esi(Base):
                 self.images[f"Vendor/{element.tag.replace('ImageData', '')}"] = (
                     imageData
                 )
-                open("ethercat/vendor.img", "wb").write(imageData)
+                os.makedirs("ethercat", exist_ok=True)
+                open(os.path.join("ethercat", "vendor.img"), "wb").write(imageData)
 
         elements = root.find(f"./Descriptions/Devices/Device[{self.deviceid}]")
         for element in elements:
@@ -1709,7 +1711,8 @@ class Esi(Base):
                 self.images[f"Device/{element.tag.replace('ImageData', '')}"] = (
                     imageData
                 )
-                open("ethercat/device.img", "wb").write(imageData)
+                os.makedirs("ethercat", exist_ok=True)
+                open(os.path.join("ethercat", "device.img"), "wb").write(imageData)
 
     def binRead(self, bindata):
         self.startpos = 0
