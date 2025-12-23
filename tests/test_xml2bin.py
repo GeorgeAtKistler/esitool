@@ -14,7 +14,7 @@ for filename in glob.glob("tests/xml2bin/*.xml"):
     filenames,
 )
 def test_xml2bin(name):
-    esi = Esi(f"{name}.xml")
+    esi = Esi(f"{name}.xml", siitool_mode=True)
     expected = open(f"{name}.bin", "rb").read()
 
     bindata = esi.binWrite()

@@ -1430,8 +1430,12 @@ class dclock(Base):
         self.descIdx = self.stringSet(
             self.xml_value(base_element, "./Desc", default="")[0]
         )
-        # self.assignActivate = int(self.xml_value(base_element, "./AssignActivate")[0])
-        self.assignActivate = 0
+        if self.parent.siitool_mode:
+            self.assignActivate = 0
+        else:
+            self.assignActivate = int(
+                self.xml_value(base_element, "./AssignActivate")[0]
+            )
         self.cycleTime0 = int(self.xml_value(base_element, "./CycleTimeSync0")[0])
         self.shiftTime0 = int(self.xml_value(base_element, "./ShiftTimeSync0")[0])
         self.cycleTime1 = int(self.xml_value(base_element, "./CycleTimeSync1")[0])
@@ -1595,7 +1599,7 @@ cat_mapping = {
 
 
 class Esi(Base):
-    def __init__(self, filename, lcid=None, deviceid=None, debug=0):
+    def __init__(self, filename, lcid=None, deviceid=None, debug=0, siitool_mode=False):
         self.lcid = lcid
         self.lcids = []
         if deviceid is None:
@@ -1604,6 +1608,7 @@ class Esi(Base):
         self.deviceids = []
         self.device_info = {"name": ""}
         self.debug = debug
+        self.siitool_mode = siitool_mode
         self.images = {}
         self.offset = 0
         self.catalogs = {}
@@ -1960,6 +1965,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--comp", "-c", help="compare bin", default=False, action="store_true"
     )
+    parser.add_argument(
+        "--siitool",
+        "-s",
+        help="siitool compatibility mode",
+        default=False,
+        action="store_true",
+    )
     parser.add_argument("--lcid", "-l", help="Location ID", type=str)
     parser.add_argument("--deviceid", "-d", help="Device ID", type=str)
     parser.add_argument("--imgsave", "-is", help="save image to file", type=str)
@@ -2015,7 +2027,13 @@ if __name__ == "__main__":
         parser.print_help(sys.stderr)
         exit(1)
 
-    esi = Esi(args.filename, lcid=args.lcid, deviceid=args.deviceid, debug=args.debug)
+    esi = Esi(
+        args.filename,
+        lcid=args.lcid,
+        deviceid=args.deviceid,
+        debug=args.debug,
+        siitool_mode=args.siitool,
+    )
 
     if (
         args.menu
