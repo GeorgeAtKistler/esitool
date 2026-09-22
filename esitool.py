@@ -667,7 +667,9 @@ class general(Base):
                     details |= (
                         int(self.xml_value_parse(element.get("PdoUpload", 0))) << 4
                     )
-                    # details |= int(self.xml_value_parse(element.get("CompleteAccess", 0))) << 5
+                    details |= ( 
+                        int(self.xml_value_parse(element.get("CompleteAccess", 0))) << 5
+                    )
                     self.coe_details = details
 
         Device = base_element.find(f"./Descriptions/Devices/Device[{self.deviceid}]")
